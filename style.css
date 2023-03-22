@@ -1,0 +1,47 @@
+:root {
+  --bg: #0f172a;
+  --primary: #e1e7ef;
+  --secondary: #94a3b8;
+  --text-highlight: #0ea5e9;
+  --cards: #1e293b;
+  --cards-highlight: #152940;
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--primary);
+  font-family: Inter var, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+    Noto Color Emoji;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--primary);
+}
+
+a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--text-highlight);
+}
+
+.nav-link.active {
+  color: var(--text-highlight);
+}
+
+button {
+  background-color: var(--cards);
+}
+
+button:hover {
+  background-color: var(--cards-highlight);
+}
