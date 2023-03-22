@@ -1,5 +1,4 @@
 // Classes
-
 /**
  * Documentação da classe Book
  * @param {string} title
@@ -21,6 +20,24 @@ class Book {
   }
   info() {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
+  }
+  toHTML() {
+    const card = document.createElement("div");
+    card.classList.add("bookCard");
+    const title = document.createElement("h1");
+    title.textContent = this.title;
+    const author = document.createElement("p");
+    author.textContent = `De: ${this.author}`;
+    const pages = document.createElement("p");
+    pages.textContent = `Número de Páginas: ${this.pages}`;
+    const read = document.createElement("p");
+    read.textContent = `Já leu? ${this.read}`;
+    card.appendChild(title);
+    card.appendChild(author);
+    card.appendChild(pages);
+    card.appendChild(read);
+
+    return card;
   }
 }
 
@@ -48,12 +65,36 @@ class Library {
 
 //Aplicação
 const myLibrary = new Library();
-function addBookToLibrary(title, author, pages, read) {
+const botaoAdd = document.querySelector(".btn");
+const board = document.querySelector("main");
+const modal = document.querySelector(".modalAddLivro");
+const botaoRmv = document.querySelector(".close");
+
+function addBook(title, author, pages, read) {
   const book = new Book(title, author, pages, read);
   myLibrary.addBook(book);
 }
 
-const botao = document.querySelector(".btn");
-botao.addEventListener("click", () => {
-  console.log("botão funcionando");
+let livro = new Book("Anna Karenina", "Leo Tolstoy", 836, "Sim");
+for (i = 0; i < 20; i++) {
+  myLibrary.addBook(livro);
+}
+
+botaoAdd.addEventListener("click", () => {
+  modal.removeAttribute("hidden");
+  modal.style.display = "flex";
 });
+
+botaoRmv.addEventListener("click", () => {
+  modal.hidden = true;
+  modal.style.display = "none";
+});
+
+function render() {
+  const books = myLibrary.getBooks();
+  books.forEach((book) => {
+    board.appendChild(book.toHTML());
+  });
+}
+
+window.onload = render;
