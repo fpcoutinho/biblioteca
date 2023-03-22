@@ -48,8 +48,12 @@ class Library {
 
 //Aplicação
 const myLibrary = new Library();
-
 function addBookToLibrary(title, author, pages, read) {
   const book = new Book(title, author, pages, read);
   myLibrary.addBook(book);
 }
+
+const botao = document.querySelector(".btn");
+botao.addEventListener("click", () => {
+  console.log("botão funcionando");
+});
