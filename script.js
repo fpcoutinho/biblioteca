@@ -115,64 +115,11 @@ class Library {
 const myLibrary = new Library();
 
 //Ações
-
 const board = document.querySelector("main");
 const modal = document.querySelector(".modalAddLivro");
 const closeModal = document.querySelector(".close");
 const addLivro = document.querySelector(".btn");
 const formLivro = document.querySelector(".form-livro");
-
-//add 5 livros diferentes
-let livro1 = new Book(
-  "Anna Karenina",
-  "Leo Tolstoy",
-  836,
-  "31/05/1997",
-  "Russo",
-  "Sim"
-);
-
-let livro2 = new Book(
-  "War and Peace",
-  "Leo Tolstoy",
-  836,
-  "31/05/1997",
-  "Russo",
-  "Sim"
-);
-
-let livro3 = new Book(
-  "The Brothers Karamazov",
-  "Fyodor Dostoyevsky",
-  824,
-  "31/05/1997",
-  "Russo",
-  "Sim"
-);
-
-let livro4 = new Book(
-  "The Idiot",
-  "Fyodor Dostoyevsky",
-  656,
-  "31/05/1997",
-  "Russo",
-  "Sim"
-);
-
-let livro5 = new Book(
-  "Crime and Punishment",
-  "Fyodor Dostoyevsky",
-  672,
-  "31/05/1997",
-  "Russo",
-  "Sim"
-);
-
-myLibrary.addBook(livro1);
-myLibrary.addBook(livro2);
-myLibrary.addBook(livro3);
-myLibrary.addBook(livro4);
-myLibrary.addBook(livro5);
 
 //abrir e fechar modal de adicionar livro
 addLivro.addEventListener("click", () => {
@@ -189,10 +136,8 @@ window.addEventListener("click", (e) => {
 board.addEventListener("click", (e) => {
   if (e.target.classList.contains("close")) {
     const card = e.target.parentElement;
-    //parse card.id to integer
-
-    myLibrary.removeBook(card.id);
-    card.remove();
+    myLibrary.removeBook(parseInt(card.id));
+    render();
   }
 
   //toggle lido
@@ -200,7 +145,6 @@ board.addEventListener("click", (e) => {
     const card = e.target.parentElement.parentElement.parentElement;
     const book = myLibrary.findBook(parseInt(card.id));
     book.toggleLido();
-    console.log(book);
   }
 });
 
@@ -239,10 +183,17 @@ function fechaModal() {
 }
 
 function render() {
-  const books = myLibrary.getBooks();
-  books.forEach((book) => {
-    board.appendChild(book.toHTML());
-  });
+  limpaBoard();
+  if (myLibrary.getBooks().length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent = "Biblioteca vazia...";
+    board.appendChild(empty);
+  } else {
+    const books = myLibrary.getBooks();
+    books.forEach((book) => {
+      board.appendChild(book.toHTML());
+    });
+  }
 }
 
 window.onload = render;
