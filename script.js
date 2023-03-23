@@ -39,9 +39,13 @@ class Book {
     language.textContent = `Idioma: ${this.language}`;
     const dateOfPublish = document.createElement("p");
     dateOfPublish.textContent = `Publicado em: ${this.dateOfPublish}`;
-    const read = document.createElement("p");
-    read.textContent = `Já leu? ${this.read}`;
-
+    const read = document.createElement("div");
+    read.classList.add("toggle-lido");
+    read.innerHTML = `Lido?
+                      <label class="switch">
+                        <input type="checkbox" title="checkbox" checked>
+                        <span class="slider round"></span>
+                      </label>`;
     card.appendChild(title);
     card.appendChild(author);
     card.appendChild(pages);
