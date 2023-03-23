@@ -13,6 +13,7 @@
  */
 class Book {
   constructor(title, author, pages, dateOfPublish, language, read) {
+    this.id = 0;
     this.title = title;
     this.author = author;
     this.pages = pages;
@@ -20,12 +21,20 @@ class Book {
     this.dateOfPublish = dateOfPublish;
     this.language = language;
   }
-  info() {
-    return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
+  setId(id) {
+    this.id = id;
+  }
+  toggleLido() {
+    if (this.read === "Sim") {
+      this.read = "Não";
+    } else {
+      this.read = "Sim";
+    }
   }
   toHTML() {
     const card = document.createElement("div");
     card.classList.add("bookCard");
+    card.setAttribute("id", this.id);
     const close = document.createElement("button");
     close.classList.add("close");
     close.textContent = "×";
@@ -41,11 +50,20 @@ class Book {
     dateOfPublish.textContent = `Publicado em: ${this.dateOfPublish}`;
     const read = document.createElement("div");
     read.classList.add("toggle-lido");
-    read.innerHTML = `Lido?
-                      <label class="switch">
-                        <input type="checkbox" title="checkbox" checked>
-                        <span class="slider round"></span>
-                      </label>`;
+    if (this.read === "Sim") {
+      read.innerHTML = `Lido?
+                        <label class="switch">
+                          <input type="checkbox" title="checkbox" checked>
+                          <span class="slider round"></span>
+                        </label>`;
+    } else {
+      read.innerHTML = `Lido?
+                        <label class="switch">
+                          <input type="checkbox" title="checkbox">
+                          <span class="slider round"></span>
+                        </label>`;
+    }
+
     card.appendChild(title);
     card.appendChild(author);
     card.appendChild(pages);
@@ -70,26 +88,42 @@ class Library {
     this.books = [];
   }
   addBook(book) {
+    if (this.books.length > 0)
+      book.setId(this.books[this.books.length - 1].id + 1);
+
     this.books.push(book);
   }
-  removeBook(book) {
-    this.books.splice(this.books.indexOf(book), 1);
+  removeBook(id) {
+    for (let i = 0; i < this.books.length; i++) {
+      if (this.books[i].id === id) {
+        this.books.splice(i, 1);
+        break;
+      }
+    }
   }
   getBooks() {
     return this.books;
   }
+  findBook(id) {
+    return this.books.find((book) => book.id === id);
+  }
 }
 
 //Aplicação
+
+//Biblioteca
 const myLibrary = new Library();
-const botaoAdd = document.querySelector(".btn");
+
+//Ações
+
 const board = document.querySelector("main");
 const modal = document.querySelector(".modalAddLivro");
 const closeModal = document.querySelector(".close");
-const closeCard = document.querySelector(".buttonCard .close");
+const addLivro = document.querySelector(".btn");
 const formLivro = document.querySelector(".form-livro");
 
-let livro = new Book(
+//add 5 livros diferentes
+let livro1 = new Book(
   "Anna Karenina",
   "Leo Tolstoy",
   836,
@@ -98,12 +132,50 @@ let livro = new Book(
   "Sim"
 );
 
-for (i = 0; i < 20; i++) {
-  myLibrary.addBook(livro);
-}
+let livro2 = new Book(
+  "War and Peace",
+  "Leo Tolstoy",
+  836,
+  "31/05/1997",
+  "Russo",
+  "Sim"
+);
+
+let livro3 = new Book(
+  "The Brothers Karamazov",
+  "Fyodor Dostoyevsky",
+  824,
+  "31/05/1997",
+  "Russo",
+  "Sim"
+);
+
+let livro4 = new Book(
+  "The Idiot",
+  "Fyodor Dostoyevsky",
+  656,
+  "31/05/1997",
+  "Russo",
+  "Sim"
+);
+
+let livro5 = new Book(
+  "Crime and Punishment",
+  "Fyodor Dostoyevsky",
+  672,
+  "31/05/1997",
+  "Russo",
+  "Sim"
+);
+
+myLibrary.addBook(livro1);
+myLibrary.addBook(livro2);
+myLibrary.addBook(livro3);
+myLibrary.addBook(livro4);
+myLibrary.addBook(livro5);
 
 //abrir e fechar modal de adicionar livro
-botaoAdd.addEventListener("click", () => {
+addLivro.addEventListener("click", () => {
   abreModal();
 });
 
@@ -117,13 +189,18 @@ window.addEventListener("click", (e) => {
 board.addEventListener("click", (e) => {
   if (e.target.classList.contains("close")) {
     const card = e.target.parentElement;
-    const title = card.querySelector("h1").textContent;
-    const author = card.querySelector("p").textContent;
-    const book = myLibrary.books.find(
-      (book) => book.title === title && book.author === author
-    );
-    myLibrary.removeBook(book);
+    //parse card.id to integer
+
+    myLibrary.removeBook(card.id);
     card.remove();
+  }
+
+  //toggle lido
+  if (e.target.classList.contains("slider")) {
+    const card = e.target.parentElement.parentElement.parentElement;
+    const book = myLibrary.findBook(parseInt(card.id));
+    book.toggleLido();
+    console.log(book);
   }
 });
 
