@@ -83,12 +83,7 @@ const board = document.querySelector("main");
 const modal = document.querySelector(".modalAddLivro");
 const closeModal = document.querySelector(".close");
 const closeCard = document.querySelector(".buttonCard .close");
-const botaoSave = document.querySelector(".salvar");
-
-function addBook(title, author, pages, dateOfPublish, language, read) {
-  const book = new Book(title, author, pages, dateOfPublish, language, read);
-  myLibrary.addBook(book);
-}
+const formLivro = document.querySelector(".form-livro");
 
 let livro = new Book(
   "Anna Karenina",
@@ -105,14 +100,12 @@ for (i = 0; i < 20; i++) {
 
 //abrir e fechar modal de adicionar livro
 botaoAdd.addEventListener("click", () => {
-  modal.removeAttribute("hidden");
-  modal.style.display = "flex";
+  abreModal();
 });
 
 window.addEventListener("click", (e) => {
   if (e.target == modal || e.target == closeModal) {
-    modal.hidden = true;
-    modal.style.display = "none";
+    fechaModal();
   }
 });
 
@@ -130,8 +123,39 @@ board.addEventListener("click", (e) => {
   }
 });
 
+const criaLivroDoInput = () => {
+  const titulo = document.getElementById("titulo").value;
+  const autor = document.getElementById("autor").value;
+  const paginas = document.getElementById("paginas").value;
+  const dataDePublicacao = document.getElementById("data").value;
+  const idioma = document.getElementById("idioma").value;
+  const leu = document.getElementById("lido").value;
+  return new Book(titulo, autor, paginas, dataDePublicacao, idioma, leu);
+};
+
 //salvar livro na biblioteca
-botaoSave.addEventListener("click", () => {});
+formLivro.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const livro = criaLivroDoInput();
+  myLibrary.addBook(livro);
+  fechaModal();
+  limpaBoard();
+  render();
+});
+
+function limpaBoard() {
+  board.innerHTML = "";
+}
+
+function abreModal() {
+  modal.removeAttribute("hidden");
+  modal.style.display = "flex";
+}
+
+function fechaModal() {
+  modal.hidden = true;
+  modal.style.display = "none";
+}
 
 function render() {
   const books = myLibrary.getBooks();
