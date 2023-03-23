@@ -12,11 +12,13 @@
  * @property {function(): string} info
  */
 class Book {
-  constructor(title, author, pages, read) {
+  constructor(title, author, pages, dateOfPublish, language, read) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.read = read;
+    this.dateOfPublish = dateOfPublish;
+    this.language = language;
   }
   info() {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
@@ -24,18 +26,29 @@ class Book {
   toHTML() {
     const card = document.createElement("div");
     card.classList.add("bookCard");
+    const close = document.createElement("button");
+    close.classList.add("close");
+    close.textContent = "×";
     const title = document.createElement("h1");
     title.textContent = this.title;
     const author = document.createElement("p");
     author.textContent = `De: ${this.author}`;
     const pages = document.createElement("p");
     pages.textContent = `Número de Páginas: ${this.pages}`;
+    const language = document.createElement("p");
+    language.textContent = `Idioma: ${this.language}`;
+    const dateOfPublish = document.createElement("p");
+    dateOfPublish.textContent = `Publicado em: ${this.dateOfPublish}`;
     const read = document.createElement("p");
     read.textContent = `Já leu? ${this.read}`;
+
     card.appendChild(title);
     card.appendChild(author);
     card.appendChild(pages);
+    card.appendChild(language);
+    card.appendChild(dateOfPublish);
     card.appendChild(read);
+    card.appendChild(close);
 
     return card;
   }
@@ -68,27 +81,57 @@ const myLibrary = new Library();
 const botaoAdd = document.querySelector(".btn");
 const board = document.querySelector("main");
 const modal = document.querySelector(".modalAddLivro");
-const botaoRmv = document.querySelector(".close");
+const closeModal = document.querySelector(".close");
+const closeCard = document.querySelector(".buttonCard .close");
+const botaoSave = document.querySelector(".salvar");
 
-function addBook(title, author, pages, read) {
-  const book = new Book(title, author, pages, read);
+function addBook(title, author, pages, dateOfPublish, language, read) {
+  const book = new Book(title, author, pages, dateOfPublish, language, read);
   myLibrary.addBook(book);
 }
 
-let livro = new Book("Anna Karenina", "Leo Tolstoy", 836, "Sim");
+let livro = new Book(
+  "Anna Karenina",
+  "Leo Tolstoy",
+  836,
+  "31/05/1997",
+  "Russo",
+  "Sim"
+);
+
 for (i = 0; i < 20; i++) {
   myLibrary.addBook(livro);
 }
 
+//abrir e fechar modal de adicionar livro
 botaoAdd.addEventListener("click", () => {
   modal.removeAttribute("hidden");
   modal.style.display = "flex";
 });
 
-botaoRmv.addEventListener("click", () => {
-  modal.hidden = true;
-  modal.style.display = "none";
+window.addEventListener("click", (e) => {
+  if (e.target == modal || e.target == closeModal) {
+    modal.hidden = true;
+    modal.style.display = "none";
+  }
 });
+
+//remover livro da biblioteca ao clicar no x
+board.addEventListener("click", (e) => {
+  if (e.target.classList.contains("close")) {
+    const card = e.target.parentElement;
+    const title = card.querySelector("h1").textContent;
+    const author = card.querySelector("p").textContent;
+    const book = myLibrary.books.find(
+      (book) => book.title === title && book.author === author
+    );
+    myLibrary.removeBook(book);
+    card.remove();
+  }
+});
+
+//salvar livro na biblioteca
+botaoSave.addEventListener("click", () => {});
 
 function render() {
   const books = myLibrary.getBooks();

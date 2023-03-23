@@ -27,19 +27,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Adicionar livro</h2>
-                <button class="close"><span>&times;</span></button>
+                <button class="close" type="button"><span>×</span></button>
             </div>
             <form action="index.html" method="post">
-                <label for="titulo">Título</label>
-                <input type="text" name="titulo" id="titulo" placeholder="Título do livro" required>
-                <label for="autor">Autor</label>
-                <input type="text" name="autor" id="autor" placeholder="Autor do livro" required>
-                <label for="paginas">Páginas</label>
+                <label for="titulo">Título do Livro*</label>
+                <input type="text" name="titulo" id="titulo" placeholder="Título" required>
+                <label for="autor">Autor do Livro*</label>
+                <input type="text" name="autor" id="autor" placeholder="Autor" required>
+                <label for="paginas">Número de Páginas*</label>
                 <input type="number" name="paginas" id="paginas" placeholder="Número de páginas" required>
-                <label for="lido">Já leu?</label>
-                <input type="checkbox" name="lido" id="lido">
-                <input type="submit" value="Adicionar">
-
+                <label for="idioma">Idioma*</label>
+                <input type="text" name="idioma" id="idioma" placeholder="Idioma" required>
+                <label for="data">Data de Publicação*</label>
+                <input type="date" name="data" id="data" required>
+                <label for="lido">Status do Livro:</label>
+                <select name="lido" id="lido">
+                    <option value="null" disabled selected>
+                        você leu este livro?
+                    </option>
+                    <option value="true">Sim, eu li este livro</option>
+                    <option value="false">Não, eu não o li ainda</option>
+                </select>
+                <input type="submit" value="Adicionar" class="salvar">
             </form>
         </div>
     </div>
